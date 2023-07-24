@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Assignment</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+    
+      th, td {
+        border: 1px solid black;
+        padding: 10px;
+      }
+    
+      img {
+        max-width: 100px;
+        max-height: 100px;
+      }
+    
+      body {
+        font-family: Arial, sans-serif;
+      }
+    
+      input[type="text"], input[type="file"], button[type="submit"] {
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+      }
+    
+      button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <h1>Upload Image</h1>
+    <form method="post" enctype="multipart/form-data">
+      <label for="name">Name:</label>
+      <input type="text" name="name" required><br><br>
+      <label for="description">Description:</label>
+      <input type="text" name="description" required><br><br>
+      <label for="location">Location:</label>
+      <input type="text" name="location" required><br><br>
+      <label for="file">Choose an image to upload:</label>
+      <input type="file" name="file" required><br><br>
+      <button type="submit">Upload</button>
+    </form>
+    <table>
+      <tr>
+        <th>Thumbnail</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Location</th>
+        <th>Action</th>
+      </tr>
+      {% for file in files %}
+      <tr>
+        <td><img src="{{ file.url }}" alt="{{ file.key }}"></td>
+        <td>{{ file.name }}</td>
+        <td>{{ file.description }}</td>
+        <td>{{ file.location }}</td>
+        <td>
+          <form method="post" action="/delete">
+            <input type="hidden" name="key" value="{{ file.key }}">
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

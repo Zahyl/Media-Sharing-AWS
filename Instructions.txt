@@ -1,0 +1,7 @@
+1. Create an EC2 instance (Amazon Linux should be good enough)
+2. Connect via SSH to VSCode or Putty
+3. Download python, pip, flask, pillow and boto3
+4. Make a directory and with nano or vim make app.py and index.html and paste the codes provided in the ZIP file.
+5. Use 'python app.py' which will start running and use curl http://<ec2-ip-address>:5000 to check if server is working or not. Then paste "http://<ec2-ip-address:5000" in your browser to use.
+6. It will not work as the table and bucket name mentioned in app.py belong to my account. But you can edit and add yours and test it in your own AWS account.
+
