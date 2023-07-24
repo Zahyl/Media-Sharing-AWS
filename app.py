@@ -7,8 +7,8 @@ app = Flask(__name__, template_folder='/home/ec2-user/project/templates')
 app.secret_key = 'justakey'
 
 s3 = boto3.client('s3')
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-table = dynamodb.Table('assignment')
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1') #change your region if needed.
+table = dynamodb.Table('<enter your dynamodb table name>')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -17,7 +17,7 @@ def index():
         description = request.form['description']
         location = request.form['location']
         file = request.files['file']
-        s3.upload_fileobj(file, 'assignmentarchitecture', file.filename)
+        s3.upload_fileobj(file, '<enter your s3 bucket name>', file.filename)
 
         # add metadata to DynamoDB table 
         key = file.filename
@@ -34,7 +34,7 @@ def index():
         return redirect('/')
     else:
         try:
-            objects = s3.list_objects(Bucket='assignmentarchitecture')['Contents']
+            objects = s3.list_objects(Bucket='<enter your s3 bucket name>')['Contents']
             files = []
             for obj in objects:
                 if obj['Key'].endswith('.jpg') or obj['Key'].endswith('.png'):
@@ -56,7 +56,7 @@ def index():
 @app.route('/delete', methods=['POST'])
 def delete_file():
     key = request.form['key']
-    s3.delete_object(Bucket='assignmentarchitecture', Key=key)
+    s3.delete_object(Bucket='<enter your s3 bucket name>', Key=key)
     # deleting metadata from Dynamo db
     table.delete_item(
         Key={
@@ -68,7 +68,7 @@ def delete_file():
 
 @app.route('/thumbnail/<key>')
 def thumbnail(key):
-    response = s3.get_object(Bucket='assignmentarchitecture', Key=key)
+    response = s3.get_object(Bucket='<enter your s3 bucket name>', Key=key)
     image = Image.open(BytesIO(response['Body'].read()))
     image.thumbnail((200, 200))
     image = image.convert('RGB')
